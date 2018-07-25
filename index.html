@@ -1,14 +1,46 @@
 <html>
     <head>
-        <link rel="stylesheet" href="./css/index.css">
-        <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="./source/css/index.css"><link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="public/config.js"></script>
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
     </head>
     <body>
-        <div id="map"></div>
+        <div id="app">
+            <div id="map"></div>
+        </div>
     </body>
     <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp"></script>
-    <script src="./public/js/jquery-3.3.1.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./js/map.js"></script>
+    <script src="./source/js/map.js"></script>
+    <script src="./source/js/test.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: function () {
+                return {
+
+                }
+            },
+            mounted() {
+                let self = this;
+                var myLatlng = new qq.maps.LatLng(39.916527,116.397128);
+                var myOptions = {
+                    zoom: 15,
+                    center: myLatlng,
+                    mapTypeId: qq.maps.MapTypeId.ROADMAP
+                }
+                var map = new qq.maps.Map(document.getElementById("map"), myOptions);
+
+                qq.maps.event.addListener(map, 'click', function(e) {
+                    console.log(e);
+                    self.$message('click map');
+                    // alert('您点击了地图.');
+                });
+            },
+        })
+    </script>
 </html>
