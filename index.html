@@ -9,37 +9,23 @@
     </head>
     <body>
         <div id="app">
-            <div class="panel">
-                <el-menu
-                    default-active="2"
-                    class="el-menu-vertical-demo"
-                    @open="handleOpen"
-                    @close="handleClose"
-                    background-color="#545c64"
-                    text-color="#fff"
-                    @select="handleSelect"
-                    active-text-color="#ffd04b">
-                    <el-submenu index="1">
-                        <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>&nbsp;</span>
-                        </template>
-                        <el-menu-item-group>
-                        <template slot="title">添加</template>
-                        <el-menu-item index="1-1">添加节点</el-menu-item>
-                        <el-menu-item index="1-2">pasive</el-menu-item>
-                        </el-menu-item-group>
-                        <el-menu-item-group title="添加">
-                        <el-menu-item index="1-3">mark</el-menu-item>
-                        </el-menu-item-group>
-                        <el-submenu index="1-4">
-                        <template slot="title">操作</template>
-                        <el-menu-item index="1-4-1">隐藏</el-menu-item>
-                        <el-menu-item index="1-4-2">显示</el-menu-item>
-                        </el-submenu>
-                    </el-submenu>
-                </el-menu>
+            <el-dialog :visible.sync="dialogTableVisible" width="90%" style="padding: 4px">
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="活动名称">
+                        <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="活动区域">
+                        <el-select v-model="form.region" placeholder="请选择活动区域">
+                        <el-option label="区域一" value="shanghai"></el-option>
+                        <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+            <div class="panel" @click="dialogTableVisible = !dialogTableVisible">
+               +
             </div>
+            <img src="./source/imgs/pos.png" alt="mark" class="mark" ref="center">
             <div id="map">
             </div>
         </div>
@@ -54,36 +40,36 @@
     <script>
         new Vue({
             el: "#app",
-            data: function () {
-                return {
-                    isCollapse: true
-                }
+            data: {
+                isCollapse: true,
+                dialogTableVisible: false,
+                gridData: [],
+                form: {}
             },
             mounted() {
-                let self = this;
-                var myLatlng = new qq.maps.LatLng(39.916527,116.397128);
-                var myOptions = {
-                    zoom: 15,
-                    center: myLatlng,
-                    mapTypeId: qq.maps.MapTypeId.ROADMAP
-                }
-                var map = new qq.maps.Map(document.getElementById("map"), myOptions);
-
-                qq.maps.event.addListener(map, 'click', function(e) {
-                    console.log(e);
-                    self.$message('click map');
-                    // alert('您点击了地图.');
-                });
+                this.initMap();
             },
             methods: {
-                handleOpen(key, keyPath) {
-                    console.log(key, keyPath);
+                initMap () {
+                    let self = this;
+                    var myLatlng = new qq.maps.LatLng(39.916527,116.397128);
+                    var myOptions = {
+                        zoom: 15,
+                        center: myLatlng,
+                        mapTypeId: qq.maps.MapTypeId.ROADMAP
+                    }
+                    this.map = new qq.maps.Map(document.getElementById("map"), myOptions);
                 },
-                handleClose(key, keyPath) {
-                    console.log(key, keyPath);
-                },
-                handleSelect (e) {
-                    console.log(e);
+                handleAdd () {
+                    let res = this.map.getCenter()
+                    console.log(res, '---cur center');
+                    debugger;
+                    var marker = new qq.maps.Marker({
+                        //设置Marker的位置坐标
+                        position: new qq.maps.LatLng(39.916527,116.397128),
+                        //设置显示Marker的地图
+                        map: this.map
+                    });
                 }
             }
         })

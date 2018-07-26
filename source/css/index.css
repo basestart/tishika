@@ -11,9 +11,31 @@ body {
 #app {
     height: 100vh;
     width: 100vw;
+    position: relative;
 }
 .panel{
     position: absolute;
     z-index: 9999;
-    width: 100vw;
+    bottom: 4vh;
+    right: 4vh;
+    height: 10vh;
+    width: 10vh;
+    border-radius: 5vh !important;
+    background-color: yellow !important;
+    font-size: 8vh;
+    line-height: 10vh;
+    text-align: center;
+    opacity: 0.6;
+}
+
+.mark{
+    height: 5vh;
+    width: 4vh;
+    position: absolute;
+    z-index: 99;
+    margin: 0 auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: transparent !important;
 }
