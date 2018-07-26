@@ -10,15 +10,19 @@
     <body>
         <div id="app">
             <el-dialog :visible.sync="dialogTableVisible" width="90%" style="padding: 4px">
-                <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item label="活动名称">
-                        <el-input v-model="form.name"></el-input>
+                <el-form ref="form" :model="form" label-width="80px" size="small">
+                    <el-form-item label="维度">
+                        <el-input v-model="lat"></el-input>
                     </el-form-item>
-                    <el-form-item label="活动区域">
-                        <el-select v-model="form.region" placeholder="请选择活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
+                    <el-form-item label="经度">
+                        <el-input v-model="lng"></el-input>
+                    </el-form-item>
+                    <el-form-item label="标注" prop="desc">
+                        <el-input type="textarea" v-model="mark"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="">立即创建</el-button>
+                        <el-button @click="">重置</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>
@@ -44,7 +48,10 @@
                 isCollapse: true,
                 dialogTableVisible: false,
                 gridData: [],
-                form: {}
+                form: {},
+                lat: 39.916527,
+                lng: 116.397128,
+                mark: ''
             },
             mounted() {
                 this.initMap();
@@ -59,17 +66,15 @@
                         mapTypeId: qq.maps.MapTypeId.ROADMAP
                     }
                     this.map = new qq.maps.Map(document.getElementById("map"), myOptions);
-                },
-                handleAdd () {
-                    let res = this.map.getCenter()
-                    console.log(res, '---cur center');
-                    debugger;
-                    var marker = new qq.maps.Marker({
-                        //设置Marker的位置坐标
-                        position: new qq.maps.LatLng(39.916527,116.397128),
-                        //设置显示Marker的地图
-                        map: this.map
-                    });
+                }
+            },
+            watch: {
+                dialogTableVisible: function(v1, v2) {
+                    if(v1) {
+                        let pos = this.map.getCenter();
+                        this.lat = pos.lat;
+                        this.lng = pos.lng;
+                    }
                 }
             }
         })
